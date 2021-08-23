@@ -2,17 +2,18 @@ import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { FirebaseAdapter } from "@next-auth/firebase-adapter"
 import "firebase/firestore"
-import * as admin from "firebase-admin";
+import * as admin from "firebase-admin"
 import { SA } from "../../../serviceAccount"
 
 const firestore = (
-  admin.apps[0] ?? admin.initializeApp({
-    credential: admin.credential.cert(SA)
+  admin.apps[0] ??
+  admin.initializeApp({
+    credential: admin.credential.cert(SA),
   })
 ).firestore()
 
-export const db = admin.firestore();
-export const storage = admin.storage();
+export const db = admin.firestore()
+export const storage = admin.storage()
 
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
@@ -24,7 +25,7 @@ export default NextAuth({
     Providers.Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-    })
+    }),
   ],
   adapter: FirebaseAdapter(firestore as any),
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.

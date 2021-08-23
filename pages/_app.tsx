@@ -1,4 +1,4 @@
-import { Provider as AuthProvider} from "next-auth/client"
+import { Provider as AuthProvider } from "next-auth/client"
 import React, { useEffect } from "react"
 import ThemeProvider from "../themes/ThemeProvder"
 import type { AppProps } from "next/app"
@@ -7,7 +7,7 @@ import type { AppProps } from "next/app"
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
+    const jssStyles = document.querySelector("#jss-server-side")
     if (jssStyles) {
       jssStyles.parentElement?.removeChild(jssStyles)
     }
@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
       session={pageProps.session}
     >
       <ThemeProvider>
-      <Component {...pageProps} />
+        <Component {...pageProps} />
       </ThemeProvider>
     </AuthProvider>
   )
