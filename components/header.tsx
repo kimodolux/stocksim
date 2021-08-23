@@ -1,95 +1,77 @@
 import Link from "next/link"
 import { signIn, signOut, useSession } from "next-auth/client"
-import styles from "./header.module.css"
+import React from "react"
+import {Box, Grid, Avatar, Button} from "@material-ui/core"
+import { useTheme } from '@material-ui/core/styles';
+
 
 // The approach used in this component shows how to built a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 export default function Header() {
   const [session, loading] = useSession()
-
+  const theme = useTheme();
   return (
-    <header>
-      <noscript>
-        <style>{`.nojs-show { opacity: 1; top: 0; }`}</style>
-      </noscript>
-      <div className={styles.signedInStatus}>
-        <p
-          className={`nojs-show ${
-            !session && loading ? styles.loading : styles.loaded
-          }`}
-        >
+    <Box bgcolor={theme.palette.secondary.main} padding="1em">
           {!session && (
-            <>
-              <span className={styles.notSignedInText}>
-                You are not signed in
-              </span>
-              <a
-                href={`/api/auth/signin`}
-                className={styles.buttonPrimary}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                Sign in
-              </a>
-            </>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                    <Button
+                        // href={`/api/auth/signin`}
+                        color="primary"
+                        variant="contained"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          signIn()
+                        }}
+                      >
+                        Sign in
+                      </Button>
+                </Grid>
+                {/* <Grid item>
+                    <Button
+                        // href={`/api/auth/signin`}
+                        color="primary"
+                        variant="contained"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          signIn()
+                        }}
+                      >
+                        Sign up
+                      </Button>
+                </Grid> */}
+              </Grid>
           )}
           {session?.user && (
-            <>
-              <span
-                style={{ backgroundImage: `url(${session.user.image})` }}
-                className={styles.avatar}
-              />
-              <span className={styles.signedInText}>
-                <small>Signed in as</small>
-                <br />
-                <strong>{session.user.email || session.user.name}</strong>
-              </span>
-              <a
-                href={`/api/auth/signout`}
-                className={styles.button}
-                onClick={(e) => {
+             <Grid container>
+             <Grid container item xs={6}>
+               <Link href="account" >
+                 <Button>
+               <Avatar src={session.user.image ?? undefined} sizes="large"/>
+                   
+                 </Button>
+               </Link>
+              
+              <p style={{marginLeft: "1em"}}>Signed in as <strong>{session.user.email || session.user.name}</strong></p>             
+              </Grid>
+              <Grid container item justifyContent="flex-end" xs={6}>
+                <Grid item >
+                <Button
+                // href={`/api/auth/signout`}
+                variant="contained"
+                color="primary"
+                onClick={ (e) => {
                   e.preventDefault()
                   signOut()
                 }}
               >
                 Sign out
-              </a>
-            </>
+              </Button>
+              </Grid>
+              </Grid>
+              </Grid>
           )}
-        </p>
-      </div>
-      <nav>
-        <ul className={styles.navItems}>
-          <li className={styles.navItem}>
-            <Link href="/">
-              <a>Home</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/client">
-              <a>Client</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/server">
-              <a>Server</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/protected">
-              <a>Protected</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/api-example">
-              <a>API</a>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    </Box>
   )
 }

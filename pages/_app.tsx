@@ -1,14 +1,20 @@
-import { Provider } from "next-auth/client"
+import { Provider as AuthProvider} from "next-auth/client"
+import React, { useEffect } from "react"
+import ThemeProvider from "../themes/ThemeProvder"
 import type { AppProps } from "next/app"
-import "./styles.css"
 
 // Use the <Provider> to improve performance and allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side')
+    if (jssStyles) {
+      jssStyles.parentElement?.removeChild(jssStyles)
+    }
+  }, [])
+
   return (
-    <Provider
-      // Provider options are not required but can be useful in situations where
-      // you have a short session maxAge time. Shown here with default values.
+    <AuthProvider
       options={{
         // Client Max Age controls how often the useSession in the client should
         // contact the server to sync the session state. Value in seconds.
@@ -26,7 +32,9 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
       session={pageProps.session}
     >
+      <ThemeProvider>
       <Component {...pageProps} />
-    </Provider>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
