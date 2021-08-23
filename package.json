@@ -10,7 +10,6 @@
     "start": "next start",
     "types": "tsc --noEmit"
   },
-  "license": "ISC",
   "prettier": {
     "semi": false
   },
