@@ -22,12 +22,11 @@ export default function Dashboard() {
     const { data, error } = useSwr(
       `/api/stocks/basic/IBM`,
       fetcher
-  )   
-
-  const price = data["Global Quote"]["05. price"];
-
+  )
       if (error) return <div>Failed to load dashboard data: {error.message}</div>
       if (!data) return <div>Loading...</div>
+
+      const price = data["Global Quote"]["05. price"];
   return (
     <Layout>
       <Box padding="10vw">
