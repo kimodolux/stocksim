@@ -1,19 +1,7 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { FirebaseAdapter } from "@next-auth/firebase-adapter"
-import "firebase/firestore"
-import * as admin from "firebase-admin"
-import { SA } from "../../../serviceAccount"
-
-const firestore = (
-  admin.apps[0] ??
-  admin.initializeApp({
-    credential: admin.credential.cert(SA),
-  })
-).firestore()
-
-export const db = admin.firestore()
-export const storage = admin.storage()
+import { firestore } from "../../../firebase"
 
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers

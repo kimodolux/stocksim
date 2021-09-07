@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { db } from "../../../../firebase"
+import { db } from "../../../firebase"
 
+// paganate this later
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

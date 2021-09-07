@@ -5,13 +5,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { stock: stockSymbol } = req.query
+
   try {
     const stocksRef = db.collection("stocks")
-    const stockRecords = (await stocksRef.get()).docs
-    const stockData = stockRecords.map((doc) => {
-      return doc.data()
-    })
-    return res.status(200).json(stockData)
+    const doc = await stocksRef.doc(stockSymbol as string).get()
+
+    if (!doc.exists) {
+      res.status(404)
+    }
+    res.status(200).json(doc.data())
   } catch (e: any) {
     console.log(e.message)
   }

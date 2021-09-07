@@ -1,9 +1,7 @@
-
-export default function CreateAccount () {
-    return (
+export default function CreateAccount() {
+  return (
     <>
-       <h1>Please create an account to continue</h1>
-       
+      <h1>Please create an account to continue</h1>
     </>
   )
 }
