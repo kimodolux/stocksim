@@ -1,10 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import axios, { AxiosRequestConfig } from "axios"
+import { getSession } from "next-auth/client"
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await getSession({ req })
+  if (!session) {
+    res.status(403)
+  }
   const options = {
     method: "GET",
     url: "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-movers",
