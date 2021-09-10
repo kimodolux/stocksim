@@ -3,20 +3,20 @@ import { createTheme, MuiThemeProvider } from "@material-ui/core/styles"
 import { StylesProvider } from "@material-ui/core/styles"
 import * as React from "react"
 import { ThemeProvider as StyledThemeProvider } from "styled-components"
+import "@fontsource/roboto"
 
 export const Theme = createTheme({
   palette: {
     primary: {
       contrastText: "#FFFFFF",
-      main: "#651fff",
-      dark: "#0100ca",
-      light: "#a255ff",
+      main: "#FF3B3F",
     },
     secondary: {
       contrastText: "#000000",
-      main: "#9e9e9e",
-      dark: "#707070",
-      light: "#cfcfcf",
+      main: "#CAEBF2",
+    },
+    background: {
+      default: "#EFEFEF",
     },
   },
   typography: {

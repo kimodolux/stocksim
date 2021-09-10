@@ -15,7 +15,13 @@ export default function Footer() {
   const theme = useTheme()
   return (
     <footer>
-      <Box bgcolor={theme.palette.secondary.main} padding="2em">
+      <Box
+        bgcolor={theme.palette.secondary.main}
+        padding="2em"
+        minHeight="10vh"
+        position="relative"
+        bottom="0"
+      >
         <Grid container justifyContent="flex-end">
           <Grid item xs={1} style={{ textAlign: "center" }}>
             <Link href="/roadmap">

@@ -22,5 +22,6 @@ export default async function handler(
     res.status(200).json(doc.data())
   } catch (e: any) {
     console.log(e.message)
+    return res.status(503).end()
   }
 }

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
-import fs from "fs"
-import path from "path"
+import * as fs from "fs"
+import * as path from "path"
 import { db } from "../firebase"
 
 // ASX200 symbols are split into 5 files and taken to query yahoo finance API

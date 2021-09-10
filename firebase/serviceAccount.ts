@@ -1,6 +1,5 @@
-import dotenv from "dotenv"
+import * as dotenv from "dotenv"
 dotenv.config()
-
 export const SA = {
   projectId: "stocksim-120aa",
   privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n") ?? "",
