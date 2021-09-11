@@ -10,6 +10,7 @@ import { useTheme } from "@material-ui/core/styles"
 export default function Header() {
   const [session] = useSession()
   const theme = useTheme()
+  console.log(session?.user)
   return (
     <Box bgcolor={theme.palette.secondary.main} padding="2em">
       <Grid container>
@@ -22,20 +23,18 @@ export default function Header() {
         </Grid>
 
         {!session && (
-          <Grid item container justifyContent="flex-end">
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  signIn(undefined, {
-                    callbackUrl: `${window.location.origin}/dashboard`,
-                  })
-                }}
-              >
-                Sign in
-              </Button>
-            </Grid>
+          <Grid item container justifyContent="flex-end" xs={10}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                signIn(undefined, {
+                  callbackUrl: `${window.location.origin}/dashboard`,
+                })
+              }}
+            >
+              Sign in
+            </Button>
           </Grid>
         )}
         {session?.user && (

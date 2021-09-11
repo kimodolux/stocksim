@@ -21,7 +21,7 @@ export const Risers = () => {
 
   return risers.map((stock: Stock) => {
     return (
-      <Box marginBottom="1em" bgcolor="white">
+      <Box marginBottom="1em" bgcolor="white" key={stock.symbol}>
         <Link href={`/stocks/${stock.symbol}`}>
           <Box
             boxShadow={1}

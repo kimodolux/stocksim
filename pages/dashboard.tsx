@@ -9,7 +9,7 @@ import { Risers } from "../components/dashboard/risers"
 import { Losers } from "../components/dashboard/losers"
 import { MyWatchlist } from "../components/dashboard/my-watchlist"
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const [session, loading] = useSession()
   const router = useRouter()
   const theme = useTheme()

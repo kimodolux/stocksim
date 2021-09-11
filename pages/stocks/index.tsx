@@ -1,4 +1,4 @@
-import useSwr, { useSWRInfinite } from "swr"
+import { useSWRInfinite } from "swr"
 import axios from "axios"
 import React from "react"
 import Layout from "../../components/layout"
