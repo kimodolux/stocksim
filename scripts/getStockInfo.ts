@@ -19,8 +19,7 @@ export const main = async () => {
         params: { region: "AU", symbols: symbols },
         headers: {
           "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-          "x-rapidapi-key":
-            "58df62ff42msh8793499b238713ep16bc08jsn2071a1072d6a",
+          "x-rapidapi-key": process.env.RAPID_API_KEY,
         },
       } as AxiosRequestConfig
 
