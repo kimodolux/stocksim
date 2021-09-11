@@ -57,7 +57,8 @@ const getKey = (pageIndex: number, previousPageData: any) => {
 
 const StockPage = () => {
   const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher)
-
+  const isReachingEnd =
+    data?.[0]?.length === 0 || (data && data[data.length - 1]?.length < 10)
   return (
     <Layout>
       <Box padding="5vh 10vw 5vh 10vw">
@@ -70,16 +71,18 @@ const StockPage = () => {
               return <StockInfo stock={stock} key={stock.symbol} />
             })
           })}
-        <Box textAlign="center">
-          <Button
-            style={{ marginTop: "2em" }}
-            variant="contained"
-            color="primary"
-            onClick={() => setSize(size + 1)}
-          >
-            Load more
-          </Button>
-        </Box>
+        {!isReachingEnd && (
+          <Box textAlign="center">
+            <Button
+              style={{ marginTop: "2em" }}
+              variant="contained"
+              color="primary"
+              onClick={() => setSize(size + 1)}
+            >
+              Load more
+            </Button>
+          </Box>
+        )}
       </Box>
     </Layout>
   )
