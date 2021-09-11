@@ -10,7 +10,7 @@ import { useTheme } from "@material-ui/core/styles"
 export default function Header() {
   const [session] = useSession()
   const theme = useTheme()
-  console.log(session?.user)
+
   return (
     <Box bgcolor={theme.palette.secondary.main} padding="2em">
       <Grid container>

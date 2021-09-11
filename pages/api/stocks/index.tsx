@@ -16,7 +16,7 @@ export default async function handler(
   const limit = parseInt(req.query.limit as string)
 
   if (limit > 51) {
-    res.status(418).end()
+    res.status(418)
   }
 
   try {
@@ -32,6 +32,6 @@ export default async function handler(
     return res.status(200).json(stockData)
   } catch (e: any) {
     console.log(e.message)
-    return res.status(503).end()
+    return res.status(503)
   }
 }

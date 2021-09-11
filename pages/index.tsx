@@ -65,8 +65,9 @@ export default function Home() {
               signIn(undefined, {
                 callbackUrl: `${window.location.origin}/dashboard`,
               })
+            } else {
+              router.push("/dashboard")
             }
-            router.push("/dashboard")
           }}
         >
           Get started

@@ -1,7 +1,32 @@
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import Providers from "next-auth/providers"
 import { FirebaseAdapter } from "@next-auth/firebase-adapter"
-import { firestore } from "../../../firebase"
+import { db, firestore } from "../../../firebase"
+
+const createProfile = async (user: User) => {
+  const newProfileRef = db.collection("profiles").doc()
+  const usersRef = db.collection("users")
+  const userSnap = await usersRef.where("email", "==", user.email).get()
+
+  if (userSnap?.docs?.length > 1) {
+    let errorMsg = `More than one user has the email address ${user.email}:`
+    userSnap?.docs.map((d) => d.id).forEach((p) => (errorMsg += `${p} `))
+    console.log(errorMsg)
+  } else if (userSnap.docs.length === 0) {
+    console.log(`No user with email address ${user.email}`)
+  }
+  const userRef = userSnap.docs[0].ref
+  userRef.update({ profileId: newProfileRef.id })
+
+  await newProfileRef.set({
+    id: newProfileRef.id,
+    email: user.email,
+    name: user.name,
+    stocks: [],
+    money: 10000,
+  })
+  return
+}
 
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
@@ -16,35 +41,13 @@ export default NextAuth({
     }),
   ],
   adapter: FirebaseAdapter(firestore as any),
-  // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
-  // https://next-auth.js.org/configuration/databases
-  //
-  // Notes:
-  // * You must install an appropriate node_module for your database
-  // * The Email provider requires a database (OAuth providers do not)
   database: process.env.DATABASE_URL2,
-
-  // The secret should be set to a reasonably long random string.
-  // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
-  // a separate secret is defined explicitly for encrypting the JWT.
   secret: process.env.SECRET,
-
   session: {
     jwt: false,
   },
-
-  // JSON Web tokens are only used for sessions if the `jwt: true` session
-  // option is set - or by default if no database is specified.
-  // https://next-auth.js.org/configuration/options#jwt
   jwt: {
-    // A secret to use for key generation (you should set this explicitly)
     secret: process.env.SECRET,
-    // Set to true to use encryption (default: false)
-    // encryption: true,
-    // You can define your own encode/decode functions for signing and encryption
-    // if you want to override the default behaviour.
-    // encode: async ({ secret, token, maxAge }) => {},
-    // decode: async ({ secret, token, maxAge }) => {},
   },
 
   // You can define custom pages to override the built-in ones. These will be regular Next.js pages
@@ -57,16 +60,20 @@ export default NextAuth({
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
-    newUser: "/profile",
+    // newUser: "/profile",
   },
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn(user, account, profile) {
-    //   return true
-    //   },
+    async signIn(user, account, profile) {
+      console.log(user)
+      if (!user.profileId) {
+        await createProfile(user)
+      }
+      return true
+    },
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) {
       session.user.profileId = user.profileId as string

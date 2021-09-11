@@ -9,19 +9,19 @@ export default async function handler(
 ) {
   const session = await getSession({ req })
   if (!session?.user.profileId) {
-    res.status(403).end()
+    res.status(403)
   }
   try {
     const stocksRef = db.collection("profiles")
     const doc = await stocksRef.doc(session!.user.profileId).get()
 
     if (!doc.exists) {
-      res.status(404).end()
+      res.status(404)
     }
 
     return res.status(200).json(doc.data())
   } catch (e: any) {
     console.log(e.message)
-    return res.status(503).end()
+    return res.status(503)
   }
 }

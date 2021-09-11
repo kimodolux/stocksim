@@ -21,20 +21,8 @@ export default async function handler(
       return doc.data() as Stock
     })
     return res.status(200).json(stockData)
-
-    // const stocksRef = db.collection("stocks")
-    // const stockRecords = (await stocksRef.get()).docs
-
-    // const stockData = stockRecords.map((doc) => {
-    //   return doc.data() as Stock
-    // })
-    // stockData.sort(
-    //   (a, b) => b.regularMarketChangePercent - a.regularMarketChangePercent
-    // )
-
-    // return res.status(200).json(stockData.slice(0, 5))
   } catch (e: any) {
     console.log(e.message)
-    return res.status(503).end()
+    return res.status(503)
   }
 }
