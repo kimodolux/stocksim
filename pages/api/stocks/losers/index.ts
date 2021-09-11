@@ -13,15 +13,14 @@ export default async function handler(
   }
   try {
     const stocksRef = db.collection("stocks")
-    const stockRecords = (await stocksRef.get()).docs
-    const stockData = stockRecords.map((doc) => {
+    const bigBois = await stocksRef
+      .orderBy("regularMarketChangePercent", "asc")
+      .limit(5)
+      .get()
+    const stockData = bigBois.docs.map((doc) => {
       return doc.data() as Stock
     })
-    stockData.sort(
-      (a, b) => a.regularMarketChangePercent - b.regularMarketChangePercent
-    )
-
-    return res.status(200).json(stockData.slice(0, 5))
+    return res.status(200).json(stockData)
   } catch (e: any) {
     console.log(e.message)
     return res.status(503).end()

@@ -17,7 +17,7 @@ export default async function handler(
     const doc = await stocksRef.doc(stockSymbol as string).get()
 
     if (!doc.exists) {
-      res.status(404)
+      res.status(404).end()
     }
     res.status(200).json(doc.data())
   } catch (e: any) {

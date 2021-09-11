@@ -24,13 +24,6 @@ export default function Footer() {
       >
         <Grid container justifyContent="flex-end">
           <Grid item xs={1} style={{ textAlign: "center" }}>
-            <Link href="/roadmap">
-              <Button>
-                <MapIcon color="primary" fontSize="large" />
-              </Button>
-            </Link>
-          </Grid>
-          <Grid item xs={1} style={{ textAlign: "center" }}>
             <OutsideLink href="https://www.linkedin.com/in/cpid/">
               <Button>
                 <LinkedInIcon color="primary" fontSize="large" />
@@ -38,7 +31,7 @@ export default function Footer() {
             </OutsideLink>
           </Grid>
           <Grid item xs={1} style={{ textAlign: "center" }}>
-            <OutsideLink href="https://github.com/kimodolux">
+            <OutsideLink href="https://github.com/kimodolux/stocksim">
               <Button>
                 <GitHubIcon color="primary" fontSize="large" />
               </Button>

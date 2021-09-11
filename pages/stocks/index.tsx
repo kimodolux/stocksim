@@ -1,4 +1,4 @@
-import useSwr from "swr"
+import useSwr, { useSWRInfinite } from "swr"
 import axios from "axios"
 import React from "react"
 import Layout from "../../components/layout"
@@ -6,7 +6,7 @@ import Box from "@material-ui/core/Box"
 import { Stock } from "../../types/stocks"
 import Link from "next/link"
 import Grid from "@material-ui/core/Grid"
-import { useTheme } from "@material-ui/core"
+import { Button, CircularProgress, useTheme } from "@material-ui/core"
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
@@ -16,7 +16,7 @@ const StockInfo = (props: { stock: Stock }) => {
   const marketChange = stock.regularMarketChange
   const changeColor =
     marketChange > 0 ? "green" : marketChange < 0 ? "red" : "black"
-  const price = stock.bid.toFixed(2)
+  const price = stock.regularMarketPreviousClose.toFixed(2)
 
   const priceChange =
     marketChange > 0
@@ -28,7 +28,7 @@ const StockInfo = (props: { stock: Stock }) => {
         )}%)`
 
   return (
-    <Box paddingTop="1em" bgcolor={theme.palette.secondary.main}>
+    <Box marginTop="1em" bgcolor={theme.palette.secondary.main}>
       <Link href={`/stocks/${stock.symbol}`}>
         <Box boxShadow={1} padding="1em" style={{ cursor: "pointer" }}>
           <Grid container>
@@ -50,19 +50,36 @@ const StockInfo = (props: { stock: Stock }) => {
   )
 }
 
-const StockPage = () => {
-  const { data, error } = useSwr(`/api/stocks`, fetcher)
+const getKey = (pageIndex: number, previousPageData: any) => {
+  if (previousPageData && !previousPageData.length) return null
+  return `/api/stocks?page=${pageIndex}&limit=10`
+}
 
-  if (error) return <div>Failed to load stock data: {error.message}</div>
-  if (!data) return <div>Loading...</div>
+const StockPage = () => {
+  const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher)
 
   return (
     <Layout>
       <Box padding="5vh 10vw 5vh 10vw">
         <h1>Stocks</h1>
-        {data.map((stock: Stock) => (
-          <StockInfo stock={stock} key={stock.symbol} />
-        ))}
+        {error && <h2>Failed to load stock data: {error.message}</h2>}
+        {!error && !data && <CircularProgress />}
+        {data &&
+          data.map((response: Stock[]) => {
+            return response.map((stock: Stock) => {
+              return <StockInfo stock={stock} key={stock.symbol} />
+            })
+          })}
+        <Box textAlign="center">
+          <Button
+            style={{ marginTop: "2em" }}
+            variant="contained"
+            color="primary"
+            onClick={() => setSize(size + 1)}
+          >
+            Load more
+          </Button>
+        </Box>
       </Box>
     </Layout>
   )

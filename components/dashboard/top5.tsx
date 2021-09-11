@@ -34,7 +34,7 @@ export const Top5 = () => {
                 <h4>{stock.symbol}</h4>
               </Grid>
               <Grid container item justifyContent="flex-end" xs={6}>
-                <p>{`${stock.bid.toFixed(
+                <p>{`${stock.regularMarketPreviousClose.toFixed(
                   2
                 )} (${stock.regularMarketChangePercent.toFixed(2)}% )`}</p>
               </Grid>

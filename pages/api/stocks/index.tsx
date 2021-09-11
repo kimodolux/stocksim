@@ -9,13 +9,24 @@ export default async function handler(
 ) {
   const session = await getSession({ req })
   if (!session) {
-    res.status(403)
+    res.status(401)
+  }
+
+  const page = parseInt(req.query.page as string)
+  const limit = parseInt(req.query.limit as string)
+
+  if (limit > 51) {
+    res.status(418).end()
   }
 
   try {
-    const stocksRef = db.collection("stocks")
-    const stockRecords = (await stocksRef.get()).docs
-    const stockData = stockRecords.map((doc) => {
+    const stocksRef = db
+      .collection("stocks")
+      .orderBy("marketCap")
+      .startAt(page * limit)
+
+    const stockRecords = await stocksRef.limit(limit).get()
+    const stockData = stockRecords.docs.map((doc) => {
       return doc.data()
     })
     return res.status(200).json(stockData)

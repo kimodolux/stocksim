@@ -15,7 +15,9 @@ export default function Header() {
       <Grid container>
         <Grid item xs={2}>
           <Link href="/">
-            <b style={{ fontSize: "2em" }}>StockSim</b>
+            <Button>
+              <b style={{ fontSize: "1.5em" }}>StockSim</b>
+            </Button>
           </Link>
         </Grid>
 
