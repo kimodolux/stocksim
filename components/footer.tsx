@@ -5,10 +5,8 @@ import {
   useTheme,
   Link as OutsideLink,
 } from "@material-ui/core"
-import Link from "next/link"
 import React from "react"
 import GitHubIcon from "@material-ui/icons/GitHub"
-import MapIcon from "@material-ui/icons/Map"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 
 export default function Footer() {

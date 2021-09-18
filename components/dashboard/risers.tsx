@@ -1,13 +1,11 @@
 import { CircularProgress } from "@material-ui/core"
 import Box from "@material-ui/core/Box"
 import Grid from "@material-ui/core/Grid"
-import axios from "axios"
 import Link from "next/link"
 import React from "react"
 import useSwr from "swr"
 import { Stock } from "../../types/stocks"
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data)
+import { fetcher } from "../../utils/api"
 
 export const Risers = () => {
   const { data: risers, error: risersError } = useSwr(

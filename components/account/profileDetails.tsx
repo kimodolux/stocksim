@@ -1,8 +1,6 @@
 import { useSession } from "next-auth/client"
-import axios from "axios"
 import useSwr from "swr"
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data)
+import { fetcher } from "../../utils/api"
 
 export default function ProfileDetails() {
   const [session] = useSession()

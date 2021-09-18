@@ -17,7 +17,6 @@ export default async function handler(
     const response = await axios.get(url, {
       headers: { "User-Agent": "request" },
     })
-    console.log(response)
     if (response) {
       res.status(200).json(response)
     }

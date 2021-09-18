@@ -1,30 +1,54 @@
 import { useRouter } from "next/router"
 import useSwr from "swr"
-import axios from "axios"
 import React from "react"
 import Layout from "../../components/layout"
 import Box from "@material-ui/core/Box"
 import { Stock } from "../../types/stocks"
 import Grid from "@material-ui/core/Grid"
-import { CircularProgress, useTheme } from "@material-ui/core"
+import { Button, CircularProgress, useTheme } from "@material-ui/core"
+import { fetcher } from "../../utils/api"
+import StarIconOutlined from "@material-ui/icons/StarBorderOutlined"
+import StarIcon from "@material-ui/icons/Star"
+import axios from "axios"
 
-const fetcher = (url: string) => axios.get(url).then((res) => res)
+const addToWatchlist = async (stock: Stock, mutateProfile: () => void) => {
+  await axios.post(`/api/stocks/${stock.symbol}`).then((res) => res.data)
+  mutateProfile()
+}
+
+const removeFromWatchlist = async (stock: Stock, mutateProfile: () => void) => {
+  await axios.delete(`/api/stocks/${stock.symbol}`).then((res) => res.data)
+  mutateProfile()
+}
 
 const StockPage = () => {
   const router = useRouter()
   const theme = useTheme()
   const { stock: stockSymbol } = router.query
-  const { data, error } = useSwr(`/api/stocks/${stockSymbol}`, fetcher)
+  const { data: stockData, error: stockError } = useSwr(
+    `/api/stocks/${stockSymbol}`,
+    fetcher
+  )
+  const {
+    data: profileData,
+    error: profileError,
+    mutate: mutateProfile,
+  } = useSwr("/api/profile/", fetcher)
 
-  if (error) return <div>Failed to load stock data: {error.message}</div>
-  if (!data)
+  if (stockError)
+    return <div>Failed to load stock data: {stockError.message}</div>
+  if (profileError)
+    return <div>Failed to load stock data: {profileError.message}</div>
+  if (!stockData || !profileData)
     return (
       <Layout>
         <CircularProgress />
       </Layout>
     )
+  const stock = stockData as Stock
+  const myStocks = profileData?.stocks as Stock[]
+  const watchingStock = myStocks?.some((s) => s.symbol === stock.symbol)
 
-  const stock = data.data as Stock
   const marketChange = stock.regularMarketChange
   const changeColor =
     marketChange > 0 ? "green" : marketChange < 0 ? "red" : "black"
@@ -43,12 +67,36 @@ const StockPage = () => {
     <Layout>
       <Box padding="5vh 10vw 5vh 10vw">
         <h2>{`${stock.longName} (${stock.symbol})`}</h2>
-        <Box width="30%">
-          <h1 style={{ display: "inline" }}>{price}</h1>{" "}
-          <h2 style={{ display: "inline", color: changeColor }}>
-            {priceChange}
-          </h2>
-        </Box>
+        <Grid container>
+          <Grid item xs={3}>
+            <h1 style={{ display: "inline" }}>{price}</h1>{" "}
+            <h2 style={{ display: "inline", color: changeColor }}>
+              {priceChange}
+            </h2>
+          </Grid>
+          <Grid item xs={3}>
+            {!watchingStock && (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault()
+                  addToWatchlist(stock, mutateProfile)
+                }}
+              >
+                <StarIconOutlined />
+              </Button>
+            )}
+            {watchingStock && (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault()
+                  removeFromWatchlist(stock, mutateProfile)
+                }}
+              >
+                <StarIcon />
+              </Button>
+            )}
+          </Grid>
+        </Grid>
         <Grid container style={{ paddingTop: "2em", height: "50" }} spacing={1}>
           <Grid item xs={3}>
             <Box

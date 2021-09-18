@@ -1,24 +1,14 @@
 import { CircularProgress } from "@material-ui/core"
 import Box from "@material-ui/core/Box"
 import Grid from "@material-ui/core/Grid"
-import axios from "axios"
 import Link from "next/link"
 import React from "react"
 import useSwr from "swr"
 import { Stock } from "../../types/stocks"
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data)
+import { fetcher } from "../../utils/api"
 
 export const MyWatchlist = () => {
-  const { data, error } = useSwr(`/api/stocks/watchlist `, fetcher)
-  return (
-    <>
-      <p>No tracked stocks yet...</p>
-      <Link href="/stocks" as="/stocks">
-        Choose stocks to add to your list
-      </Link>
-    </>
-  )
+  const { data, error } = useSwr(`/api/stocks/watchlist`, fetcher)
 
   if (error) return <div>Failed to load losers data: {error.message}</div>
   if (!data) return <CircularProgress />
