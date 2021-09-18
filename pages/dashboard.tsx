@@ -18,7 +18,7 @@ export default function DashboardPage() {
       <Box padding="5vh 10vw 5vh 10vw" margin="auto">
         <h1>Dashboard</h1>
         <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xl={3} md={6} xs={12}>
             <Box
               boxShadow={1}
               padding="1em"
@@ -28,7 +28,7 @@ export default function DashboardPage() {
               <MyWatchlist />
             </Box>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xl={3} md={6} xs={12}>
             <Box
               boxShadow={1}
               padding="1em"
@@ -38,7 +38,7 @@ export default function DashboardPage() {
               <Top5 />
             </Box>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xl={3} md={6} xs={12}>
             <Box
               boxShadow={1}
               padding="1em"
@@ -48,7 +48,7 @@ export default function DashboardPage() {
               <Risers />
             </Box>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xl={3} md={6} xs={12}>
             <Box
               boxShadow={1}
               padding="1em"

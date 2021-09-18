@@ -98,7 +98,7 @@ const StockPage = () => {
           </Grid>
         </Grid>
         <Grid container style={{ paddingTop: "2em", height: "50" }} spacing={1}>
-          <Grid item xs={3}>
+          <Grid item md={3} xs={12}>
             <Box
               boxShadow={1}
               padding="1em"
@@ -168,7 +168,7 @@ const StockPage = () => {
               </Grid>
             </Box>
           </Grid>
-          <Grid item xs={9}>
+          <Grid item md={9} xs={12}>
             <Box
               boxShadow={1}
               padding="5em"

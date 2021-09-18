@@ -51,17 +51,18 @@ const StockInfo = (props: {
       <Link href={`/stocks/${stock.symbol}`}>
         <Box boxShadow={1} padding="1em" style={{ cursor: "pointer" }}>
           <Grid container>
-            <Grid item xs={9}>
+            <Grid item md={9} xs={6}>
               <h3>{`${stock.longName} (${stock.symbol})`}</h3>
             </Grid>
             <Grid
-              xs={3}
+              md={3}
+              xs={6}
               item
               container
               justifyContent="flex-end"
               alignItems="center"
             >
-              <Grid item xs={4} justifyContent="center">
+              <Grid item md={4} xs={12} justifyContent="center">
                 {!watchingStock && (
                   <Button
                     onClick={(e) => {
@@ -83,10 +84,10 @@ const StockInfo = (props: {
                   </Button>
                 )}
               </Grid>
-              <Grid item xs={4}>
+              <Grid item md={4} xs={6}>
                 <h4>{price}</h4>
               </Grid>
-              <Grid item xs={4} style={{ color: changeColor }}>
+              <Grid item md={4} xs={6} style={{ color: changeColor }}>
                 <p>{priceChange}</p>
               </Grid>
             </Grid>
