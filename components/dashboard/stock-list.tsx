@@ -5,27 +5,15 @@ import Link from "next/link"
 import React from "react"
 import { Stock } from "../../types/stocks"
 
-export const MyWatchlist = (props: { data: Stock[]; error: Error }) => {
+export const Stocklist = (props: { data: Stock[]; error: Error }) => {
   const { data, error } = props
 
   if (error) return <div>Failed to load data: {error.message}</div>
   if (!data) return <CircularProgress />
 
-  if (data.length === 0) {
-    return (
-      <>
-        <p>No tracked stocks yet...</p>
-        <Link href="/stocks" as="/stocks">
-          Choose stocks to add to your list
-        </Link>
-      </>
-    )
-  }
-  const top5 = data.slice(0, 5)
-
   return (
     <>
-      {top5.map((stock: Stock) => {
+      {data.map((stock: Stock) => {
         return (
           <Box marginBottom="1em" bgcolor="white" key={stock.symbol}>
             <Link href={`/stocks/${stock.symbol}`}>

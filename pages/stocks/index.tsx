@@ -1,11 +1,11 @@
-import useSwr, { useSWRInfinite, mutate } from "swr"
+import useSwr, { useSWRInfinite } from "swr"
 import React from "react"
 import Layout from "../../components/layout"
 import Box from "@material-ui/core/Box"
 import { Stock } from "../../types/stocks"
 import Link from "next/link"
 import Grid from "@material-ui/core/Grid"
-import { Button, CircularProgress, useTheme } from "@material-ui/core"
+import { Button, CircularProgress, Tooltip, useTheme } from "@material-ui/core"
 import StarIconOutlined from "@material-ui/icons/StarBorderOutlined"
 import StarIcon from "@material-ui/icons/Star"
 import { fetcher } from "../../utils/api"
@@ -64,24 +64,28 @@ const StockInfo = (props: {
             >
               <Grid item md={4} xs={12} justifyContent="center">
                 {!watchingStock && (
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault()
-                      addToWatchlist(stock, mutateProfile)
-                    }}
-                  >
-                    <StarIconOutlined />
-                  </Button>
+                  <Tooltip title="Add to tracked stocks">
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        addToWatchlist(stock, mutateProfile)
+                      }}
+                    >
+                      <StarIconOutlined />
+                    </Button>
+                  </Tooltip>
                 )}
                 {watchingStock && (
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault()
-                      removeFromWatchlist(stock, mutateProfile)
-                    }}
-                  >
-                    <StarIcon />
-                  </Button>
+                  <Tooltip title="Remove from tracked stocks">
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        removeFromWatchlist(stock, mutateProfile)
+                      }}
+                    >
+                      <StarIcon />
+                    </Button>
+                  </Tooltip>
                 )}
               </Grid>
               <Grid item md={4} xs={6}>

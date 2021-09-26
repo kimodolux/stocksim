@@ -68,7 +68,6 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn(user, account, profile) {
-      console.log(user)
       if (!user.profileId) {
         await createProfile(user)
       }

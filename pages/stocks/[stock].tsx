@@ -3,23 +3,12 @@ import useSwr from "swr"
 import React from "react"
 import Layout from "../../components/layout"
 import Box from "@material-ui/core/Box"
-import { Stock } from "../../types/stocks"
+import { Stock, StockRef } from "../../types/stocks"
 import Grid from "@material-ui/core/Grid"
 import { Button, CircularProgress, useTheme } from "@material-ui/core"
 import { fetcher } from "../../utils/api"
-import StarIconOutlined from "@material-ui/icons/StarBorderOutlined"
-import StarIcon from "@material-ui/icons/Star"
-import axios from "axios"
-
-const addToWatchlist = async (stock: Stock, mutateProfile: () => void) => {
-  await axios.post(`/api/stocks/${stock.symbol}`).then((res) => res.data)
-  mutateProfile()
-}
-
-const removeFromWatchlist = async (stock: Stock, mutateProfile: () => void) => {
-  await axios.delete(`/api/stocks/${stock.symbol}`).then((res) => res.data)
-  mutateProfile()
-}
+import { StockChart } from "../../components/stocks/StockChart"
+import { BuySellDialog } from "../../components/stocks/BuySellDialog"
 
 const StockPage = () => {
   const router = useRouter()
@@ -38,7 +27,8 @@ const StockPage = () => {
   if (stockError)
     return <div>Failed to load stock data: {stockError.message}</div>
   if (profileError)
-    return <div>Failed to load stock data: {profileError.message}</div>
+    return <div>Failed to load profile data: {profileError.message}</div>
+
   if (!stockData || !profileData)
     return (
       <Layout>
@@ -46,8 +36,8 @@ const StockPage = () => {
       </Layout>
     )
   const stock = stockData as Stock
-  const myStocks = profileData?.stocks as Stock[]
-  const watchingStock = myStocks?.some((s) => s.symbol === stock.symbol)
+  const myStocks = profileData?.stocks as StockRef[]
+  const stockRef = myStocks?.find((s) => s.symbol === stock.symbol)
 
   const marketChange = stock.regularMarketChange
   const changeColor =
@@ -73,28 +63,14 @@ const StockPage = () => {
             <h2 style={{ display: "inline", color: changeColor }}>
               {priceChange}
             </h2>
+            {stockRef && <h2>Owned: {stockRef.amount}</h2>}
           </Grid>
           <Grid item xs={3}>
-            {!watchingStock && (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  addToWatchlist(stock, mutateProfile)
-                }}
-              >
-                <StarIconOutlined />
-              </Button>
-            )}
-            {watchingStock && (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  removeFromWatchlist(stock, mutateProfile)
-                }}
-              >
-                <StarIcon />
-              </Button>
-            )}
+            <BuySellDialog
+              mutateProfile={mutateProfile}
+              profile={profileData}
+              stock={stock}
+            />
           </Grid>
         </Grid>
         <Grid container style={{ paddingTop: "2em", height: "50" }} spacing={1}>
@@ -171,11 +147,11 @@ const StockPage = () => {
           <Grid item md={9} xs={12}>
             <Box
               boxShadow={1}
-              padding="5em"
+              padding="1em"
               height="100%"
               bgcolor={theme.palette.secondary.main}
             >
-              <h2>Graph coming soon</h2>
+              <StockChart stock={stock} />
             </Box>
           </Grid>
         </Grid>

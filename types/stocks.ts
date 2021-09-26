@@ -1,3 +1,8 @@
+export type StockRef = {
+  symbol: string
+  amount: number
+}
+
 export type Stock = {
   ask: number
   askSize: number

@@ -21,5 +21,7 @@ namespace NodeJS {
     DATABASE_URL: string
     SECRET: string
     FIREBASE_PRIVATE_KEY: string
+    AV_API_KEY: string
+    RAPID_API_KEY: string
   }
 }

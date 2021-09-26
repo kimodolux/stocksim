@@ -92,14 +92,22 @@ export default function Header() {
               <>
                 <Grid item xs={1} alignItems="center">
                   <Link href="/dashboard">
-                    <Button color="primary" variant="text">
+                    <Button
+                      color="primary"
+                      variant="text"
+                      style={{ margin: "auto", width: "90%" }}
+                    >
                       Dashboard
                     </Button>
                   </Link>
                 </Grid>
                 <Grid item xs={1} alignItems="center">
                   <Link href="/stocks">
-                    <Button color="primary" variant="text">
+                    <Button
+                      color="primary"
+                      variant="text"
+                      style={{ margin: "auto", width: "90%" }}
+                    >
                       Stocks
                     </Button>
                   </Link>

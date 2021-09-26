@@ -1,7 +1,7 @@
-import { Stock } from "./stocks"
+import { Stock, StockRef } from "./stocks"
 
 export type Profile = {
   id: string
-  stocks: Stock[]
+  stocks: StockRef[]
   money: number
 }
