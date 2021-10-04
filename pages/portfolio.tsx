@@ -69,6 +69,9 @@ const Portfolio = () => {
     `/api/profile`,
     fetcher
   )
+  if(!stockData){
+    return <CircularProgress/>
+  }
 
   return (
     <Layout>
@@ -78,7 +81,7 @@ const Portfolio = () => {
         {profileError && (
           <h2>Failed to load profile data: {profileError.message}</h2>
         )}
-        {!stockError && !stockData && !profileError && !profileData && (
+        {(!stockData || !profileData) && (
           <CircularProgress />
         )}
         {stockData.length === 0 && (
