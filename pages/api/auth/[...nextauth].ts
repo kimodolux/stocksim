@@ -13,19 +13,28 @@ const createProfile = async (user: User) => {
     userSnap?.docs.map((d) => d.id).forEach((p) => (errorMsg += `${p} `))
     console.log(errorMsg)
   } else if (userSnap.docs.length === 0) {
-    console.log(`No user with email address ${user.email}`)
-  }
-  const userRef = userSnap.docs[0].ref
-  userRef.update({ profileId: newProfileRef.id })
+    await usersRef.add({
+      id: newProfileRef.id,
+      profileId: newProfileRef.id,
+      email: user?.email ?? null,
+      name: user?.name ?? null,
+      stocks: [],
+      money: 10000,
+    })
+    return
+  } else {
+    const userRef = userSnap.docs[0].ref
+    userRef.update({ profileId: newProfileRef.id })
 
-  await newProfileRef.set({
-    id: newProfileRef.id,
-    email: user.email,
-    name: user.name,
-    stocks: [],
-    money: 10000,
-  })
-  return
+    await newProfileRef.set({
+      id: newProfileRef.id,
+      email: user?.email ?? null,
+      name: user?.name ?? null,
+      stocks: [],
+      money: 10000,
+    })
+    return
+  }
 }
 
 export default NextAuth({
@@ -67,14 +76,14 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    async signIn(user, account, profile) {
-      if (!user.profileId) {
-        await createProfile(user)
-      }
-      return true
-    },
+    // async signIn(user, account, profile) {
+    //   return true
+    // },
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) {
+      if (!session.user.profileId) {
+        await createProfile(user)
+      }
       session.user.profileId = user.profileId as string
       return session
     },
