@@ -2,8 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
 import { db } from "../../../../firebase"
 import admin from "firebase-admin"
-import { Stock, StockRef } from "../../../../types/stocks"
+import { Stock } from "../../../../types/stocks"
 import { Profile } from "../../../../types/profile"
+import { TransactionType } from "../../../../types/transactions"
+import firebase from "firebase"
 
 export default async function handler(
   req: NextApiRequest,
@@ -48,7 +50,15 @@ export default async function handler(
         money: admin.firestore.FieldValue.increment(stock.ask * askAmmount),
         stocks: newStocks,
       })
-      // fire transaction activity
+
+      const transactionsRef = db.collection("transactions")
+      await transactionsRef.add({
+        profileId: session!.user.profileId,
+        transactionType: TransactionType.SellStock,
+        stock: stockSymbol,
+        amount: askAmmount,
+        timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+      })
       return res.status(200).json({ message: "success" })
     } catch (e) {
       console.log((e as Error).message)

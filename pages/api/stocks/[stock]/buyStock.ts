@@ -4,6 +4,7 @@ import { db } from "../../../../firebase"
 import admin from "firebase-admin"
 import { Stock, StockRef } from "../../../../types/stocks"
 import { Profile } from "../../../../types/profile"
+import { TransactionType } from "../../../../types/transactions"
 
 export default async function handler(
   req: NextApiRequest,
@@ -62,7 +63,15 @@ export default async function handler(
           stocks: admin.firestore.FieldValue.arrayUnion(stockRef),
         })
       }
-      // fire transaction activity
+      const transactionsRef = db.collection("transactions")
+      await transactionsRef.add({
+        profileId: session!.user.profileId,
+        transactionType: TransactionType.BuyStock,
+        stock: stockSymbol,
+        amount: askAmmount,
+        cost: stock.ask * askAmmount,
+        timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+      })
       return res.status(200).json({ message: "success" })
     } catch (e) {
       console.log((e as Error).message)

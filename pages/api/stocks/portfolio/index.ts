@@ -2,7 +2,6 @@ import { profile } from "console"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
 import { db } from "../../../../firebase"
-import { Stock } from "../../../../types/stocks"
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,6 +12,9 @@ export default async function handler(
     res.status(403)
   }
   const symbols = (req.query.ids as string).split(",")
+  if (symbols[0] === "") {
+    return res.status(200).json([])
+  }
   try {
     const stocksRef = db.collection("stocks")
     const portfolioData = []

@@ -6,10 +6,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
   Tab,
   Tabs,
   TextField,
@@ -83,6 +79,9 @@ export const BuySellDialog = (props: {
   }
 
   const handleChange = (_: any, newValue: number) => {
+    setSellAmount("")
+    setBuyAmount("")
+    setValue(0)
     setValue(newValue)
   }
   const stockRef = profile.stocks.find((s) => s.symbol === stock.symbol)
@@ -109,8 +108,8 @@ export const BuySellDialog = (props: {
           <DialogTitle>Buy stock</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <p>Money: ${profile.money}</p>
-              <p> Bid price: ${stock.bid}</p>
+              <p>Money: ${profile.money.toFixed(2)}</p>
+              <p> Bid price: ${stock.bid.toFixed(2)}</p>
               {buyAmount && (
                 <>
                   <p>
@@ -144,7 +143,7 @@ export const BuySellDialog = (props: {
               disabled={
                 loading ||
                 isNaN(parseInt(buyAmount)) ||
-                (parseInt(buyAmount) ?? 0) > (stockRef?.amount ?? 0)
+                parseInt(buyAmount ?? 0) * stock.bid > profile.money
               }
               onClick={confirmBuy}
             >
@@ -156,8 +155,8 @@ export const BuySellDialog = (props: {
           <DialogTitle>Sell stock</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <p>Stock owned: {stockRef?.amount ?? 0}</p>
-              <p> Ask price: ${stock.ask}</p>
+              <p>Stock owned: {stockRef?.amount?.toFixed(2) ?? 0}</p>
+              <p> Ask price: ${stock.ask.toFixed(2)}</p>
               {sellAmount && (
                 <>
                   <p>

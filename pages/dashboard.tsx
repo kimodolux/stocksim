@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const portfolioIds =
     profile?.stocks?.map((stock: Stock) => stock.symbol) ?? []
   const protfolioQuery = getQueryFromArray(portfolioIds)
-  const { data: portfolioData, error: portfolioError } = useSwr(
+  const { data: portfolioData } = useSwr(
     portfolioIds ? `/api/stocks/portfolio?${protfolioQuery}` : null,
     fetcher
   )
@@ -41,6 +41,10 @@ export default function DashboardPage() {
   )
   const { data: bigBois, error: bigBoisError } = useSwr(
     `/api/stocks/bigBois/`,
+    fetcher
+  )
+  const { data: transactionsData } = useSwr(
+    `/api/profile/transactions/`,
     fetcher
   )
 
@@ -71,7 +75,11 @@ export default function DashboardPage() {
               width="100%"
               height="100%"
             >
-              <PortfolioSummary profile={profile} data={portfolioData} />
+              <PortfolioSummary
+                profile={profile}
+                data={portfolioData}
+                transactions={transactionsData}
+              />
             </Box>
           </Grid>
           <Grid item xl={3} md={6} xs={12}>
