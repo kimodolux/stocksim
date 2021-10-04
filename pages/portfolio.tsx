@@ -111,4 +111,4 @@ const Portfolio = () => {
   )
 }
 
-export default Watchlist
+export default Portfolio
